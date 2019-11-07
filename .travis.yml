@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t theotan/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true theotan/react-test npm test
+
+after_success:
+  - docker build -t theotan/multi-client ./client
+  - docker build -t theotan/multi-nginx ./nginx
+  - docker build -t theotan/multi-worker ./worker
+  - docker build -t theotan/multi-server ./server
+  # Log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take images and push to docker hub
+  - docker push theotan/multi-client
+  - docker push theotan/multi-nginx
+  - docker push theotan/multi-server
+  - docker push theotan/multi-worker
