@@ -9,14 +9,14 @@ script:
   - docker run -e CI=true theotan/react-test npm test
 
 after_success:
-  - docker build -t theotan/multi-client:1.0.0 ./client
-  - docker build -t theotan/multi-nginx:1.0.0 ./nginx
-  - docker build -t theotan/multi-worker:1.0.0 ./worker
-  - docker build -t theotan/multi-server:1.0.0 ./server
+  - docker build -t theotan/multi-client ./client
+  - docker build -t theotan/multi-nginx ./nginx
+  - docker build -t theotan/multi-worker ./worker
+  - docker build -t theotan/multi-server ./server
   # Log in to docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # take images and push to docker hub
-  - docker push theotan/multi-client:1.0.0
-  - docker push theotan/multi-nginx:1.0.0
-  - docker push theotan/multi-server:1.0.0
-  - docker push theotan/multi-worker:1.0.0
+  - docker push theotan/multi-client
+  - docker push theotan/multi-nginx
+  - docker push theotan/multi-server
+  - docker push theotan/multi-worker
